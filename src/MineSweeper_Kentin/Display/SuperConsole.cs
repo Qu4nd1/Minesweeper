@@ -36,7 +36,6 @@ namespace MineSweeper.Display
                 Console.SetCursorPosition(x + i, y);
                 Console.Write(' ');
             }
-
         }
         public static void DrawHorizontalLine(int startX, int y, int length, char character)
         {

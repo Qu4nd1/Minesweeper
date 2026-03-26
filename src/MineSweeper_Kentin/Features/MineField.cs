@@ -1,4 +1,5 @@
-﻿using static MineSweeper.Display.SuperConsole;
+﻿using MineSweeper.Display;
+using static MineSweeper.Display.SuperConsole;
 
 namespace MineSweeper.Features
 {
@@ -14,31 +15,68 @@ namespace MineSweeper.Features
         private int _surface;
         public int Surface { get { return _surface; } }
 
-        public void DrawField(int x, int y, int width, int height)
+        public void DrawField(Menu menu)
         {
-            int fieldWidth = squareWidth * nbrRow;
-            int fieldHeight = squareHeight * nbrCol;
-            // Ligne du hauts
-            DrawHorizontalLine(x, y, width, '─');
 
-            // Ligne du bas
-            DrawHorizontalLine(x, y + height - 1, width, '─');
+            int fieldWidth = squareWidth * 1 + (squareWidth - 1) * (nbrRow - 1);
+            int fieldHeight = squareHeight * 1 + (squareHeight - 1) * (nbrCol - 1);
 
-            // Côté gauche
-            DrawVerticalLine(x, y, height, '│');
-
-            // Côté droit
-            DrawVerticalLine(x + width - 1, y, height, '│');
-
-            // Coins
-            Console.SetCursorPosition(x, y);
-            Console.Write('┌');
-            Console.SetCursorPosition(x + width - 1, y);
-            Console.Write('┐');
-            Console.SetCursorPosition(x, y + height - 1);
-            Console.Write('└');
-            Console.SetCursorPosition(x + width - 1, y + height - 1);
-            Console.Write('┘');
+            Console.Clear();
+            menu.Presentation();
+            // Ajout d'affichage difficulté et nbr mines
+           for (int i = 0; i < fieldHeight; i++)
+            {
+                Console.SetCursorPosition(5, 12 + i);
+                if (i == 0)
+                    for (int j = 0; j < fieldWidth; j++)
+                    {
+                        if (j == 0)
+                            Console.Write("╔");
+                        else if (j == fieldWidth - 1)
+                            Console.Write("╗");
+                        else if (j % 4 == 0)
+                            Console.Write("╦");
+                        else
+                            Console.Write("═");
+                    }
+                else if (i % (squareHeight-1) == 0 && i != fieldHeight-1)
+                    for (int j = 0; j < fieldWidth; j++)
+                    {
+                        if (j == 0)
+                            Console.Write("╠");
+                        else if (j == fieldWidth - 1)
+                            Console.Write("╣");
+                        else if (j % 4 == 0)
+                            Console.Write("╬");
+                        else
+                            Console.Write("═");
+                    }
+                else if (i == fieldHeight - 1)
+                    for (int j = 0; j < fieldWidth; j++)
+                    {
+                        if (j == 0)
+                            Console.Write("╚");
+                        else if (j == fieldWidth - 1)
+                            Console.Write("╝");
+                        else if (j % 4 == 0)
+                            Console.Write("╩");
+                        else
+                            Console.Write("═");
+                    }
+                else
+                    for (int j = 0; j < fieldWidth; j++)
+                    {
+                        if (j == 0)
+                            Console.Write("║");
+                        else if (j == fieldWidth - 1)
+                            Console.Write("║");
+                        else if (j % 4 == 0)
+                            Console.Write("║");
+                        else
+                            Console.Write(" ");
+                    }
+                Console.WriteLine();
+            }
         }
         public int RowDimensions()
         {
@@ -46,7 +84,7 @@ namespace MineSweeper.Features
             string nbrRowCheck;
             bool rowValueValid;
             int questionX = 5;
-            int questionY = 5;
+            int questionY = 10;
             do
             {
                 Console.SetCursorPosition(questionX, questionY-1);
@@ -76,7 +114,7 @@ namespace MineSweeper.Features
             string nbrColCheck;
             bool ColValueValid;
             int questionX = 5;
-            int questionY = 7;
+            int questionY = 12;
             do
             {
                 Console.SetCursorPosition(questionX, questionY-1);
@@ -105,7 +143,7 @@ namespace MineSweeper.Features
         {
             nbrRow = RowDimensions();
             nbrCol = ColumnDimension();
-            _surface = (nbrRow / 2) + 1 * (nbrCol / 2) + 1;
+            _surface = ((nbrRow / 2) + 1) * ((nbrCol / 2) + 1);
 
         }
     }

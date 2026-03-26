@@ -6,11 +6,12 @@ namespace MineSweeper
     {
         static void Main(string[] args)
         {
-            MineField field = new MineField();
-            field.FieldCreation();
             Menu menu = new Menu();
-            menu.RunInteractive();
-            field.DrawField(5, 5, 5, 3);
+            MineField field = new MineField();
+            menu.Presentation();
+            field.FieldCreation();
+            menu.RunInteractive(field);
+            field.DrawField(menu);
         }
     }
 }
