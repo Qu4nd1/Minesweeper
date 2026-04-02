@@ -10,9 +10,10 @@ namespace MineSweeper.Difficulties
     public class Medium : Easy
     {
         private int _nbrMines;
-        public Medium(MineField field) : base(field)
+        public Medium(MineField field, int nbrMines) 
+            : base(field, nbrMines)
         {
-            _nbrMines = (field.Surface * 25) / 100;
+            _nbrMines = nbrMines;
         }
     }
 }

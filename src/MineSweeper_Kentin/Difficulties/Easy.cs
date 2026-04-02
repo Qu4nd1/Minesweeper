@@ -5,9 +5,9 @@ namespace MineSweeper.Difficulties
     public class Easy
     {
         private int _nbrMines;
-        public Easy(MineField field) 
+        public Easy(MineField field, int nbrMines) 
         {
-            _nbrMines = (field.Surface * 10)/100;
+            _nbrMines = nbrMines;
 
         }
     }

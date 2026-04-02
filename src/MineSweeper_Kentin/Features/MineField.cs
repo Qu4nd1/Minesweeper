@@ -1,5 +1,6 @@
 ﻿using MineSweeper.Display;
 using static MineSweeper.Display.SuperConsole;
+using MineSweeper.Difficulties;
 
 namespace MineSweeper.Features
 {
@@ -14,18 +15,58 @@ namespace MineSweeper.Features
 
         private int _surface;
         public int Surface { get { return _surface; } }
+        private int _x;
+        public int X
+        {
+            get { return _x; }
+            set
+            {
+                if (value >= 7 && value <= (7 +(nbrCol - 1) * 4))
+                    _x = value;
+                else if (value < 7)
+                    _x = 7 + ((nbrCol - 1) * 4);
+                else if (value > ((nbrCol - 1) * 4))
+                    _x = 7;
+            }
+        }
+        private int _y;
+        public int Y
+        {
+            get { return _y; }
+            set
+            {
+                if (value >= 13 && value <= (13 + (nbrRow - 1) * 2))
+                    _y = value;
+                else if (value < 13)
+                    _y = 13 + ((nbrRow - 1) * 2);
+                else if (value > ((nbrRow - 1) * 2))
+                    _y =13;
+            }
+        }
 
-        public void DrawField(Menu menu)
+        public void DrawField(Menu menu, MineField field, Mine mine)
         {
 
             int fieldWidth = squareWidth * 1 + (squareWidth - 1) * (nbrRow - 1);
             int fieldHeight = squareHeight * 1 + (squareHeight - 1) * (nbrCol - 1);
 
+            int instructionX = fieldWidth + 12;
+
             Console.Clear();
             menu.Presentation();
+            Console.Write($"\tA vous de jouer !! Mode:");
+            Console.BackgroundColor = ConsoleColor.Yellow;
+            DrawInColor($"{menu.SelectedDifficulty}", ConsoleColor.Red);
+            Console.ResetColor();
+            LinesJump(1);
+            DrawInColor($"\t{mine.NumberOfMines(menu, field)}", ConsoleColor.Red);
+            Console.WriteLine(" mines se cachent dans le jeu !");
+            LinesJump(1);
             // Ajout d'affichage difficulté et nbr mines
-           for (int i = 0; i < fieldHeight; i++)
+            for (int i = 0; i < fieldHeight; i++)
             {
+
+                int instructionY = 12 + i;
                 Console.SetCursorPosition(5, 12 + i);
                 if (i == 0)
                     for (int j = 0; j < fieldWidth; j++)
@@ -75,6 +116,26 @@ namespace MineSweeper.Features
                         else
                             Console.Write(" ");
                     }
+                if (i == 0)
+                    DrawAtString(instructionX, instructionY, "Consignes");
+                if (i == 1)
+                    DrawAtString(instructionX, instructionY, "----------");
+                if (i == 2)
+                    DrawAtString(instructionX, instructionY, "  - Pour se déplacer dans le jeu: les flèches directionnelles");
+                if (i == 3)
+                    DrawAtString(instructionX, instructionY, "  - Pour explorer une case: la touche Enter");
+                if (i == 4)
+                    DrawAtString(instructionX, instructionY, "  - Pour définir une case comme mine (flag): la touche Espace");
+                if (i == 5)
+                    DrawAtString(instructionX, instructionY, "  - Pour enlever un flag: la touche Enter");
+                if (i == 6)
+                    DrawAtString(instructionX, instructionY, "  - Pour quitter: la touche Esc");
+                if (i == 8)
+                    DrawAtString(instructionX, instructionY, "La partie est gangée :");
+                if (i == 9)
+                    DrawAtString(instructionX, instructionY, "  - Toutes les cases sont explorées");
+                if (i == 10)
+                    DrawAtString(instructionX, instructionY, "  - Il reste des bombes non explosées");
                 Console.WriteLine();
             }
         }

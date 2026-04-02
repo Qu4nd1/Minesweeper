@@ -14,8 +14,8 @@ namespace MineSweeper.Display
                         ██║ ╚═╝ ██║ ██║ ██║ ╚███║ ███████╗
                         ╚═╝     ╚═╝ ╚═╝ ╚═╝  ╚══╝ ╚══════╝
 ";
-        public List <Easy> selectedDifficulty = new List<Easy> ();
-
+        private string _selectedDifficulty = "";
+        public string SelectedDifficulty { get { return _selectedDifficulty; } }
         public void Presentation()
         {
             const int TITLE_X = 10;
@@ -25,7 +25,7 @@ namespace MineSweeper.Display
             Console.WriteLine(title);
         }
         // Méthode : afficher le menu (ex-Menu_ShowInteractive)
-        public void ShowInteractive()
+        public void ShowInteractive(Menu menu, MineField field, Mine mine)
         {
             Console.Clear();
             Presentation();
@@ -37,12 +37,28 @@ namespace MineSweeper.Display
                 if (i == this.SelectedIndex)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"\t> {this.options[i]} <");
+                    if (i==0)
+                    {
+                        _selectedDifficulty = "Easy";
+                        Console.WriteLine($"\t> {this.options[i]}: {mine.NumberOfMines(menu, field)} mine.s <");
+                    }
+                        
+                    else if (i == 1)
+                    {
+                        _selectedDifficulty = "Medium";
+                        Console.WriteLine($"\t> {this.options[i]}: {mine.NumberOfMines(menu, field)} mine.s <");
+                    }
+                        
+                    else if (i == 2)
+                    {
+                        _selectedDifficulty = "Hard";
+                        Console.WriteLine($"\t> {this.options[i]}: {mine.NumberOfMines(menu, field)} mine.s <");
+                    }
                     Console.ResetColor();
                 }
                 else
                 {
-                    Console.WriteLine($"\t  {this.options[i]}");
+                    Console.WriteLine($"\t  {this.options[i]}                                     ");
                 }
             }
 
@@ -50,14 +66,14 @@ namespace MineSweeper.Display
         }
 
         // Méthode : boucle interactive (ex-Menu_RunInteractive)
-        public void RunInteractive(MineField field)
+        public void RunInteractive(Menu menu, MineField field, Mine mine)
         {
             Console.CursorVisible = false;
             ConsoleKey key;
 
             do
             {
-                ShowInteractive();
+                ShowInteractive(menu, field, mine);
 
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 key = keyInfo.Key;
@@ -72,23 +88,20 @@ namespace MineSweeper.Display
                 }
 
             } while (key != ConsoleKey.Enter);
-            DifficultySelection(field);
+            DifficultySelection(menu, field, mine);
         }
-        public void DifficultySelection(MineField field)
+        public void DifficultySelection(Menu menu, MineField field, Mine mine)
         {
             switch (this.options[this.SelectedIndex])
             {
                 case "easy":
-                    Easy easy = new Easy(field);
-                    selectedDifficulty.Add(easy);
+                    Easy easy = new Easy(field, mine.NumberOfMines(menu, field));
                     break;
                 case "medium":
-                    Medium medium = new Medium(field);
-                    selectedDifficulty.Add(medium);
+                    Medium medium = new Medium(field, mine.NumberOfMines(menu, field));
                     break;
                 case "hard":
-                    Hard hard = new Hard(field);
-                    selectedDifficulty.Add(hard);
+                    Hard hard = new Hard(field, mine.NumberOfMines(menu, field));
                     break;
             }
         } 

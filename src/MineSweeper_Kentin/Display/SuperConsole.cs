@@ -8,6 +8,17 @@ namespace MineSweeper.Display
 {
     public static class SuperConsole
     {
+        public static void LinesJump(int nbr)
+        {
+            for (int i = 0; i < nbr; i++)
+                Console.WriteLine("");
+        }
+        public static void DrawInColor(string phrase, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.Write(phrase);
+            Console.ResetColor();
+        }
         public static void DrawAtString(int x, int y, string phrase)
         {
             Console.SetCursorPosition(x, y);
