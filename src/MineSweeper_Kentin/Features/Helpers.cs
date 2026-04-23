@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MineSweeper.Features
 {
-    internal class Helpers
+    static class Helpers
     {
+        public static Random Random = new Random();
     }
 }

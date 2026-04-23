@@ -10,8 +10,8 @@ namespace MineSweeper.Features
         private int squareWidth = 5;
         private int squareHeight = 3;
 
-        private int nbrRow = 0;
-        private int nbrCol = 0;
+        public int nbrRow = 0;
+        public int nbrCol = 0;
 
         private int _surface;
         public int Surface { get { return _surface; } }
@@ -43,6 +43,8 @@ namespace MineSweeper.Features
                     _y =13;
             }
         }
+        public char[,] gameArray;
+        public char[,] flagArray;
 
         public void DrawField(Menu menu, MineField field, Mine mine)
         {
@@ -139,7 +141,7 @@ namespace MineSweeper.Features
                 Console.WriteLine();
             }
         }
-        public int RowDimensions()
+        public int RowDimension()
         {
             string question = "Choice: ";
             string nbrRowCheck;
@@ -202,10 +204,31 @@ namespace MineSweeper.Features
         
         public void FieldCreation()
         {
-            nbrRow = RowDimensions();
+            nbrRow = RowDimension();
             nbrCol = ColumnDimension();
             _surface = ((nbrRow / 2) + 1) * ((nbrCol / 2) + 1);
-
+            gameArray = new char[nbrRow, nbrCol];
+            flagArray = new char[nbrRow, nbrCol];
+            for (int i = 0; i < nbrCol; i++)
+                for (int j = 0; j < nbrRow; j++)
+                {
+                    gameArray[i, j] = ' ';
+                    flagArray[i, j] = ' ';
+                }
+        }
+        public void MineFillingPercentage(double value)
+        {
+            for (int i = 0; i < nbrCol; i++)
+                for (int j = 0; j < nbrRow; j++)
+                    if (Helpers.Random.NextDouble() < value) // random pour les value/10 % de chance 
+                    {
+                        gameArray[i, j] = 'M';
+                    }
+        }
+        public void CaseFilling(int x, int y, char symbol)
+        {
+            Console.SetCursorPosition(x, y);
+            Console.WriteLine(symbol);
         }
     }
 }

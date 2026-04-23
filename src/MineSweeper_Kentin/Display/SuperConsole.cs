@@ -19,6 +19,13 @@ namespace MineSweeper.Display
             Console.Write(phrase);
             Console.ResetColor();
         }
+        public static void DrawInColorAt(int x, int y, string phrase, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.SetCursorPosition(x, y);
+            Console.Write(phrase);
+            Console.ResetColor();
+        }
         public static void DrawAtString(int x, int y, string phrase)
         {
             Console.SetCursorPosition(x, y);
