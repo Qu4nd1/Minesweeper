@@ -1,3 +1,4 @@
+# Journal de Travail (Kentin Fankhauser)
 |Date|Description|
 |--|--|
 |sequence 1||
@@ -6,3 +7,8 @@
 |26/03/2026|creation of the functions for the user to choose the difficulty and the visual layout of the grid|
 |sequence 4||
 |02/04/2026|creation of the movement through the grid with treatment of problematic scenarios with the borders of the grid (top/left/right/botom), user can almost press space to put down a flag|
+|||
+|sequence 5||
+|23/04/2026|2d Array creation and keyboard keys conditions|
+|||
+|||
