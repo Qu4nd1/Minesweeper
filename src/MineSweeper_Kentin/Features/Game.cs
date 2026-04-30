@@ -4,11 +4,12 @@ namespace MineSweeper.Features
 {
     static class Game
     {
-        static int oldX;
-        static int oldY;
+        static int oldX = 7;
+        static int oldY = 13;
         private static bool gameEnd = false;
         private static bool lastActionMove = false;
-        public static int BoardX 
+        private static bool lastActionFlagPlaced = false;
+        public static int BoardX
         {
             get { return _boardX; }
             set
@@ -22,7 +23,7 @@ namespace MineSweeper.Features
             }
         }
         private static int _boardX;
-        public static int BoardY 
+        public static int BoardY
         {
             get { return _boardY; }
             set
@@ -35,6 +36,8 @@ namespace MineSweeper.Features
                     _boardY = 0;
             }
         }
+        public static int oldBoardX;
+        public static int oldBoardY;
         private static int _boardY;
         static public void Play(MineField field)
         {
@@ -55,35 +58,28 @@ namespace MineSweeper.Features
         }
         static public void ActionChoice(MineField field)
         {
-            if (lastActionMove == true)
-            {
-                ClearAt(oldX, oldY);
-                lastActionMove = false;
-            }
-            DrawInColorAt(field.X, field.Y, "_", ConsoleColor.Green);
-            ConsoleKeyInfo keyInfo = Console.ReadKey();
-            if ((keyInfo.Key != ConsoleKey.Escape) && (keyInfo.Key != ConsoleKey.Spacebar))
-            {
-                Move(field, keyInfo);
-                
-                lastActionMove = true;
-            }
-            else if ((keyInfo.Key == ConsoleKey.Spacebar))
-            {
-                // Placement de drapeau si case vide
-                if (field.flagArray[_boardX,_boardY] != 'F')
-                {
-                    DrawInColorAt(field.X, field.Y, "F", ConsoleColor.Yellow);
-                    field.flagArray[_boardX, _boardY] = 'F';
-                }
-                // Effacement de drapeau si case a déjà un drapeau
-                else
-                {
-                    DrawAtChar(field.X, field.Y, ' ');
-                    field.flagArray[_boardX, _boardY] = ' ';
-                }
-            }
             
+            ConsoleKeyInfo keyInfo = Console.ReadKey();
+            switch (keyInfo.Key)
+            {
+                case ConsoleKey.UpArrow:
+                case ConsoleKey.DownArrow:
+                case ConsoleKey.LeftArrow:
+                case ConsoleKey.RightArrow:
+                    Move(field, keyInfo);
+                    // Dosen't clear last case if a flag is on it 
+                    if (!lastActionFlagPlaced && Flag.flagArray[oldBoardX, oldBoardY] != 'F')
+                        ClearAt(oldX, oldY);
+                    lastActionFlagPlaced = false;
+                    // Dosen't overwrite a flag
+                    if (Flag.flagArray[_boardX,_boardY]!= 'F')
+                        DrawInColorAt(field.X, field.Y, "_", ConsoleColor.Green);
+                    break;
+                case ConsoleKey.Spacebar:
+                    Flag.DrawEnterFlag(field.X, field.Y, _boardX, _boardY);
+                    lastActionFlagPlaced = true;
+                    break;
+            }
         }
         static public void Move(MineField field, ConsoleKeyInfo keyInfo)
         {
@@ -92,24 +88,32 @@ namespace MineSweeper.Features
                 case ConsoleKey.UpArrow:
                     oldX = field.X;
                     oldY = field.Y;
+                    oldBoardX = BoardX;
+                    oldBoardY = BoardY;
                     field.Y -= 2;
                     BoardY--;
                     break;
                 case ConsoleKey.DownArrow:
                     oldX = field.X;
                     oldY = field.Y;
+                    oldBoardX = BoardX;
+                    oldBoardY = BoardY;
                     field.Y += 2;
                     BoardY++;
                     break;
                 case ConsoleKey.LeftArrow:
                     oldX = field.X;
                     oldY = field.Y;
+                    oldBoardX = BoardX;
+                    oldBoardY = BoardY;
                     field.X -= 4;
                     BoardX--;
                     break;
                 case ConsoleKey.RightArrow:
                     oldX = field.X;
                     oldY = field.Y;
+                    oldBoardX = BoardX;
+                    oldBoardY = BoardY;
                     field.X += 4;
                     BoardX++;
                     break;

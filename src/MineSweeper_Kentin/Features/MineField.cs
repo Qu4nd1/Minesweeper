@@ -44,7 +44,6 @@ namespace MineSweeper.Features
             }
         }
         public char[,] gameArray;
-        public char[,] flagArray;
 
         public void DrawField(Menu menu, MineField field, Mine mine)
         {
@@ -207,23 +206,28 @@ namespace MineSweeper.Features
             nbrRow = RowDimension();
             nbrCol = ColumnDimension();
             _surface = ((nbrRow / 2) + 1) * ((nbrCol / 2) + 1);
-            gameArray = new char[nbrRow, nbrCol];
-            flagArray = new char[nbrRow, nbrCol];
+            gameArray = new char[nbrCol, nbrRow];
             for (int i = 0; i < nbrCol; i++)
                 for (int j = 0; j < nbrRow; j++)
                 {
                     gameArray[i, j] = ' ';
-                    flagArray[i, j] = ' ';
                 }
         }
-        public void MineFillingPercentage(double value)
+        public void MineFilling(int nbrMines)
         {
-            for (int i = 0; i < nbrCol; i++)
-                for (int j = 0; j < nbrRow; j++)
-                    if (Helpers.Random.NextDouble() < value) // random pour les value/10 % de chance 
-                    {
-                        gameArray[i, j] = 'M';
-                    }
+            int minesPlaced = 0;
+            do
+            {
+                int mineX = Helpers.Random.Next(nbrCol);
+                int mineY = Helpers.Random.Next(nbrRow);
+                if (gameArray[mineX, mineY] != 'M')
+                {
+                    gameArray[mineX, mineY] = 'M';
+                    minesPlaced++;
+                }
+                
+            } while (minesPlaced != nbrMines);
+            
         }
         public void CaseFilling(int x, int y, char symbol)
         {

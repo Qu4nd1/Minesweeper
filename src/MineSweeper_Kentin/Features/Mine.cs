@@ -3,22 +3,27 @@ namespace MineSweeper.Features
 {
     public class Mine
     {
+        public int NbrMines { get { return _nbrMines; } }
+        private int _nbrMines;
         public int NumberOfMines(Menu menu, MineField field)
         {
             if (menu.SelectedDifficulty == "Easy")
             {
-                field.MineFillingPercentage(0.10);
-                return (field.Surface * 10) / 100;
+                _nbrMines = (field.Surface * 10) / 100;
+                field.MineFilling(_nbrMines);
+                return _nbrMines;
             }
             else if (menu.SelectedDifficulty == "Medium")
             {
-                field.MineFillingPercentage(0.25);
-                return (field.Surface * 25) / 100;
+                _nbrMines = (field.Surface * 25) / 100;
+                field.MineFilling(_nbrMines); 
+                return _nbrMines;
             }
             else
             {
-                field.MineFillingPercentage(0.40);
-                return (field.Surface * 40) / 100;
+                _nbrMines = (field.Surface * 40) / 100;
+                field.MineFilling(_nbrMines);
+                return _nbrMines;
             }
         }
     }

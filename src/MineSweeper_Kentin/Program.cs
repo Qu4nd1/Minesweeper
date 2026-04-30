@@ -11,6 +11,7 @@ namespace MineSweeper
             Mine mine = new Mine();
             menu.Presentation();
             field.FieldCreation();
+            Flag.FlagArrayInit(field);
             menu.RunInteractive(menu, field, mine);
             field.DrawField(menu, field, mine);
             Game.Play(field);
