@@ -8,7 +8,7 @@ namespace MineSweeper.Features
         static int oldY = 13;
         private static bool gameEnd = false;
         private static bool lastActionMove = false;
-        private static bool lastActionFlagPlaced = false;
+        private static bool lastActionNotMoved = false;
         public static int BoardX
         {
             get { return _boardX; }
@@ -39,14 +39,14 @@ namespace MineSweeper.Features
         public static int oldBoardX;
         public static int oldBoardY;
         private static int _boardY;
-        static public void Play(MineField field)
+        public static char[,] visualArray;
+        static public void Play(MineField field, Mine mine)
         {
-
             Init(field);
-            DrawInColorAt(field.X, field.Y, "_", ConsoleColor.Green);
+            DrawCusor(field.X, field.Y, _boardX, _boardY);
             do
             {
-                ActionChoice(field);
+                ActionChoice(field, mine);
             } while (!gameEnd);
         }
         static public void Init(MineField field)
@@ -55,29 +55,29 @@ namespace MineSweeper.Features
             field.Y = 13;
             _boardX = 0;
             _boardY = 0;
+            visualArray = new char[field.nbrCol, field.nbrRow];
         }
-        static public void ActionChoice(MineField field)
+        static public void ActionChoice(MineField field, Mine mine)
         {
-            
-            ConsoleKeyInfo keyInfo = Console.ReadKey();
+            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
             switch (keyInfo.Key)
             {
                 case ConsoleKey.UpArrow:
                 case ConsoleKey.DownArrow:
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.RightArrow:
+                    ClearCusor(field.X, field.Y, _boardX, _boardY);
                     Move(field, keyInfo);
-                    // Dosen't clear last case if a flag is on it 
-                    if (!lastActionFlagPlaced && Flag.flagArray[oldBoardX, oldBoardY] != 'F')
-                        ClearAt(oldX, oldY);
-                    lastActionFlagPlaced = false;
-                    // Dosen't overwrite a flag
-                    if (Flag.flagArray[_boardX,_boardY]!= 'F')
-                        DrawInColorAt(field.X, field.Y, "_", ConsoleColor.Green);
+                    DrawCusor(field.X, field.Y, _boardX, _boardY);
                     break;
                 case ConsoleKey.Spacebar:
                     Flag.DrawEnterFlag(field.X, field.Y, _boardX, _boardY);
-                    lastActionFlagPlaced = true;
+                    break;
+                case ConsoleKey.Enter:
+                    if (visualArray[_boardX, _boardY] == visualFlag)
+                        Flag.ClearFlag(field.X, field.Y, _boardX, _boardY);
+                    else if ((visualArray[_boardX, _boardY] == ' ') && (field.gameArray[_boardX, _boardY] == undiscoveredMine))
+                        mine.DrawEnterMine(field.X, field.Y, _boardX, _boardY);
                     break;
             }
         }

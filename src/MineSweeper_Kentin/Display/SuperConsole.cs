@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MineSweeper.Features;
 
 namespace MineSweeper.Display
 {
     public static class SuperConsole
     {
+        public static char visualFlag = 'F';
+        public static char emptyCase = 'R';
+        public static char flagedMine = 'A';
+        public static char undiscoveredMine = 'M';
         public static void LinesJump(int nbr)
         {
             for (int i = 0; i < nbr; i++)
@@ -25,6 +25,34 @@ namespace MineSweeper.Display
             Console.SetCursorPosition(x, y);
             Console.Write(phrase);
             Console.ResetColor();
+        }
+        public static void DrawCusor(int visualX, int visualY, int arrayX, int arrayY)
+        {
+            Console.BackgroundColor = ConsoleColor.Yellow;
+            visualX = visualX - 1;
+            Console.SetCursorPosition(visualX, visualY);
+            if (Game.visualArray[arrayX, arrayY] == visualFlag)
+                DrawInColorAt(visualX, visualY, " F ", ConsoleColor.DarkYellow);
+            else if (Game.visualArray[arrayX, arrayY] == flagedMine)
+                DrawInColorAt(visualX, visualY, " M ", ConsoleColor.Red);
+            else if (Game.visualArray[arrayX, arrayY] == emptyCase)
+                DrawInColorAt(visualX, visualY, "RAS", ConsoleColor.White);
+            else
+                Console.Write("   ");
+            Console.ResetColor();
+        }
+        public static void ClearCusor(int visualX, int visualY, int arrayX, int arrayY)
+        {
+            visualX = visualX - 1;
+            Console.SetCursorPosition(visualX, visualY);
+            if (Game.visualArray[arrayX, arrayY] == visualFlag)
+                Console.Write(" F ");
+            else if (Game.visualArray[arrayX, arrayY] == flagedMine)
+                Console.Write(" M ");
+            else if (Game.visualArray[arrayX, arrayY] == emptyCase)
+                Console.Write("RAS");
+            else
+                Console.Write("   ");
         }
         public static void DrawAtString(int x, int y, string phrase)
         {

@@ -45,6 +45,8 @@ namespace MineSweeper.Features
         }
         public char[,] gameArray;
 
+        private int minesPlaced;
+
         public void DrawField(Menu menu, MineField field, Mine mine)
         {
 
@@ -61,7 +63,7 @@ namespace MineSweeper.Features
             Console.ResetColor();
             LinesJump(1);
             DrawInColor($"\t{mine.NumberOfMines(menu, field)}", ConsoleColor.Red);
-            Console.WriteLine(" mines se cachent dans le jeu !");
+            Console.WriteLine($" ,{minesPlaced} mines se cachent dans le jeu !");
             LinesJump(1);
             // Ajout d'affichage difficulté et nbr mines
             for (int i = 0; i < fieldHeight; i++)
@@ -201,7 +203,7 @@ namespace MineSweeper.Features
             return nbrCol;
         }
         
-        public void FieldCreation()
+        public void FieldCreation(Menu menu, Mine mine, MineField field)
         {
             nbrRow = RowDimension();
             nbrCol = ColumnDimension();
@@ -215,7 +217,7 @@ namespace MineSweeper.Features
         }
         public void MineFilling(int nbrMines)
         {
-            int minesPlaced = 0;
+            minesPlaced = 0;
             do
             {
                 int mineX = Helpers.Random.Next(nbrCol);
@@ -225,7 +227,6 @@ namespace MineSweeper.Features
                     gameArray[mineX, mineY] = 'M';
                     minesPlaced++;
                 }
-                
             } while (minesPlaced != nbrMines);
             
         }
